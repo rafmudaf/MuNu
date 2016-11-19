@@ -1,23 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MuNu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="suR-3N-B72">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mub-In-I6t">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IKS-Uc-dnK">
+                                <rect key="frame" x="24" y="28" width="90" height="30"/>
+                                <color key="backgroundColor" red="0.82352941180000006" green="0.82352941180000006" blue="0.82352941180000006" alpha="0.5572198276" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="90" id="1Hr-uA-8sc"/>
+                                </constraints>
+                                <state key="normal" title="Save Image"/>
+                                <connections>
+                                    <action selector="saveButtonTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8D5-Pt-FTj"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Frequency in seconds" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="N2C-fn-RWl">
+                                <rect key="frame" x="24" y="66" width="160" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="Sv1-qW-hML"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7bF-fY-Bts">
+                                <rect key="frame" x="24" y="104" width="120" height="30"/>
+                                <color key="backgroundColor" red="0.82352941180000006" green="0.82352941180000006" blue="0.82352941180000006" alpha="0.56000000000000005" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="IXx-jJ-3kO"/>
+                                </constraints>
+                                <state key="normal" title="Start Capturing"/>
+                                <connections>
+                                    <action selector="startButtonTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sMq-1O-eiU"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="7bF-fY-Bts" firstAttribute="top" secondItem="N2C-fn-RWl" secondAttribute="bottom" constant="8" id="1ZW-DT-ddh"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="mub-In-I6t" secondAttribute="bottom" id="74I-Hu-iNv"/>
+                            <constraint firstItem="mub-In-I6t" firstAttribute="centerX" secondItem="suR-3N-B72" secondAttribute="centerX" id="AFh-Ne-4DC"/>
+                            <constraint firstItem="N2C-fn-RWl" firstAttribute="top" secondItem="IKS-Uc-dnK" secondAttribute="bottom" constant="8" id="FYD-Yh-VlE"/>
+                            <constraint firstAttribute="trailing" secondItem="mub-In-I6t" secondAttribute="trailing" id="RMW-D1-zbt"/>
+                            <constraint firstItem="mub-In-I6t" firstAttribute="leading" secondItem="suR-3N-B72" secondAttribute="leading" id="bxx-Jk-iSt"/>
+                            <constraint firstItem="7bF-fY-Bts" firstAttribute="leading" secondItem="suR-3N-B72" secondAttribute="leadingMargin" constant="8" id="fHQ-4L-H3T"/>
+                            <constraint firstItem="IKS-Uc-dnK" firstAttribute="leading" secondItem="suR-3N-B72" secondAttribute="leadingMargin" constant="8" id="fby-bW-edN"/>
+                            <constraint firstItem="N2C-fn-RWl" firstAttribute="leading" secondItem="suR-3N-B72" secondAttribute="leadingMargin" constant="8" id="gte-CG-ois"/>
+                            <constraint firstItem="IKS-Uc-dnK" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="i0m-NJ-rNK"/>
+                            <constraint firstItem="mub-In-I6t" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="kiE-L6-zeg"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="buttonSaveImage" destination="IKS-Uc-dnK" id="Kda-sS-3sd"/>
+                        <outlet property="buttonStartCapturing" destination="7bF-fY-Bts" id="XZ6-jz-Znf"/>
+                        <outlet property="imageView" destination="mub-In-I6t" id="yV0-IH-mIW"/>
+                        <outlet property="textfieldFrequency" destination="N2C-fn-RWl" id="wtd-n0-C55"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
