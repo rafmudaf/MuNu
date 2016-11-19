@@ -304,6 +304,7 @@
 				05A97B9A1DE1045200CAD0F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
