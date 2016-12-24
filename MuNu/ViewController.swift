@@ -9,8 +9,6 @@
 import UIKit
 import AVFoundation
 import GLKit
-import Photos
-import AssetsLibrary
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UITextFieldDelegate {
     
@@ -30,6 +28,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var glContext: EAGLContext!
     var glView: GLKView!
     var ciContext: CIContext!
+    
+    let assetManager = AssetManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,11 +62,18 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func AVOrientationFromDeviceOrientation(deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
-        if (deviceOrientation == UIDeviceOrientation.landscapeLeft) { return AVCaptureVideoOrientation.landscapeRight }
-        else if (deviceOrientation == UIDeviceOrientation.landscapeRight) { return AVCaptureVideoOrientation.landscapeLeft }
-        else if (deviceOrientation == UIDeviceOrientation.portrait) { return AVCaptureVideoOrientation.portrait }
-        else if (deviceOrientation == UIDeviceOrientation.portraitUpsideDown) { return AVCaptureVideoOrientation.portraitUpsideDown }
-        else { return AVCaptureVideoOrientation.portrait}
+        switch deviceOrientation {
+        case UIDeviceOrientation.landscapeLeft:
+            return AVCaptureVideoOrientation.landscapeRight
+        case UIDeviceOrientation.landscapeRight:
+            return AVCaptureVideoOrientation.landscapeLeft
+        case UIDeviceOrientation.portrait:
+            return AVCaptureVideoOrientation.portrait
+        case UIDeviceOrientation.portraitUpsideDown:
+            return AVCaptureVideoOrientation.portraitUpsideDown
+        default:
+            return AVCaptureVideoOrientation.portrait
+        }
     }
     
     func beginSession() {
@@ -115,13 +122,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     @IBAction func saveButtonTouchUp(_ sender: Any) {
-        saveImage()
+        saveCurrentImage()
     }
     
     @IBAction func startButtonTouchUp(_ sender: Any) {
         if !capturing {
             if let freq = Double(textfieldFrequency.text!) {
-                timer = Timer.scheduledTimer(timeInterval: freq, target: self, selector: #selector(saveImage), userInfo: nil, repeats: true)
+                timer = Timer.scheduledTimer(timeInterval: freq, target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
                 buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
                 capturing = true
             }
@@ -132,12 +139,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
     }
     
-    func saveImage() {
-        let imageToSave = imageView.image?.ciImage
-        let softwareContext = CIContext(options:[kCIContextUseSoftwareRenderer: true])
-        let cgimg = softwareContext.createCGImage(imageToSave!, from: (imageToSave?.extent)!)
-        let library = ALAssetsLibrary()
-        library.writeImage(toSavedPhotosAlbum: cgimg, metadata:imageToSave!.properties, completionBlock:nil)
+    func saveCurrentImage() {
+        assetManager.saveImage(image: imageView.image!) { assetURL, error in
+            print(assetURL)
+        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
