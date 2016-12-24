@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		059881641E0CF5F10008399D /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059881631E0CF5F10008399D /* AssetManager.swift */; };
 		05A97B8A1DE1045200CAD0F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A97B891DE1045200CAD0F0 /* AppDelegate.swift */; };
 		05A97B8C1DE1045200CAD0F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A97B8B1DE1045200CAD0F0 /* ViewController.swift */; };
 		05A97B8F1DE1045200CAD0F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05A97B8D1DE1045200CAD0F0 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		059881631E0CF5F10008399D /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssetManager.swift; path = ../AssetManager.swift; sourceTree = "<group>"; };
 		05A97B861DE1045200CAD0F0 /* MuNu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuNu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A97B891DE1045200CAD0F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05A97B8B1DE1045200CAD0F0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			children = (
 				05A97B891DE1045200CAD0F0 /* AppDelegate.swift */,
 				05A97B8B1DE1045200CAD0F0 /* ViewController.swift */,
+				059881631E0CF5F10008399D /* AssetManager.swift */,
 				05A97B8D1DE1045200CAD0F0 /* Main.storyboard */,
 				05A97B901DE1045200CAD0F0 /* Assets.xcassets */,
 				05A97B921DE1045200CAD0F0 /* LaunchScreen.storyboard */,
@@ -91,7 +94,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Rafael M Mudafort";
 				TargetAttributes = {
 					05A97B851DE1045200CAD0F0 = {
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05A97B8C1DE1045200CAD0F0 /* ViewController.swift in Sources */,
+				059881641E0CF5F10008399D /* AssetManager.swift in Sources */,
 				05A97B8A1DE1045200CAD0F0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,6 +186,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -232,6 +237,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
