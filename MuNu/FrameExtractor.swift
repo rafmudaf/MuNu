@@ -6,6 +6,8 @@
 //  Copyright © 2017 Rafael M Mudafort. All rights reserved.
 //
 
+// adapted heavily from https://medium.com/ios-os-x-development/ios-camera-frames-extraction-d2c0f80ed05a
+
 import UIKit
 import AVFoundation
 
