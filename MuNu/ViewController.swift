@@ -37,19 +37,6 @@ class ViewController: UIViewController {
         frameExtractor.delegate = self
     }
         
-    func AVOrientationFromDeviceOrientation(deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
-        switch deviceOrientation {
-        case UIDeviceOrientation.landscapeLeft:
-            return AVCaptureVideoOrientation.landscapeRight
-        case UIDeviceOrientation.landscapeRight:
-            return AVCaptureVideoOrientation.landscapeLeft
-        case UIDeviceOrientation.portrait:
-            return AVCaptureVideoOrientation.portrait
-        case UIDeviceOrientation.portraitUpsideDown:
-            return AVCaptureVideoOrientation.portraitUpsideDown
-        default:
-            return AVCaptureVideoOrientation.portrait
-        }
     }
     
     }
