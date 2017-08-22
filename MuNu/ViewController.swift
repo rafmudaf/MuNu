@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController, UITextFieldDelegate, FrameExtractorDelegate {
+class ViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var buttonSaveImage: UIButton!
@@ -52,8 +52,6 @@ class ViewController: UIViewController, UITextFieldDelegate, FrameExtractorDeleg
         }
     }
     
-    func captured(image: UIImage) {
-        imageView.image = image
     }
     
     @IBAction func saveButtonTouchUp(_ sender: Any) {
@@ -80,8 +78,10 @@ class ViewController: UIViewController, UITextFieldDelegate, FrameExtractorDeleg
         }
         assetManager.addAsset(image: image)
     }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.resignFirstResponder()
+}
+
+extension ViewController: FrameExtractorDelegate {
+    func captured(image: UIImage) {
+        imageView.image = image
     }
 }
