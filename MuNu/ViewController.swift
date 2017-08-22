@@ -8,9 +8,8 @@
 
 import UIKit
 import AVFoundation
-import GLKit
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UITextFieldDelegate {
+class ViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var buttonSaveImage: UIButton!
@@ -23,105 +22,42 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     let stillImageOutput = AVCapturePhotoOutput()
 
     var timer = Timer()
+    var frequency: Int?
     var capturing = false
-    
-    var glContext: EAGLContext!
-    var glView: GLKView!
-    var ciContext: CIContext!
     
     var imageURLs = [URL]()
     var images = [UIImage]()
     
     let assetManager = AssetManager()
+
+    var frameExtractor = FrameExtractor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureView()
+    }
+    
+    private func configureView() {
+        textfieldFrequency.delegate = self
+        frameExtractor.delegate = self
+        addDoneButtonOnKeyboard()
+    }
+    
+    private func addDoneButtonOnKeyboard() {
+        let doneToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        doneToolbar.barStyle = UIBarStyle.blackTranslucent
         
-        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: .UIDeviceOrientationDidChange, object: nil)
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
         
-        let devices = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera],
-                                                      mediaType: AVMediaTypeVideo,
-                                                      position: .back)
-        for device in devices!.devices {
-            if (device.hasMediaType(AVMediaTypeVideo)) {
-                if (device.position == AVCaptureDevicePosition.back) {
-                    captureDevice = device
-                }
-            }
-        }
+        doneToolbar.items = [flexSpace, done]
+        doneToolbar.sizeToFit()
         
-        if captureDevice != nil {
-            beginSession()
-        }
-        
-        glContext = EAGLContext(api: .openGLES2)
-        glView = GLKView(frame: view.frame, context: glContext!)
-        ciContext = CIContext(eaglContext: glContext!)
+        textfieldFrequency.inputAccessoryView = doneToolbar
     }
     
-    func rotated() {
-        let connection = output.connection(withMediaType: AVFoundation.AVMediaTypeVideo)!
-        connection.videoOrientation = self.AVOrientationFromDeviceOrientation(deviceOrientation: UIDevice.current.orientation)
-    }
-    
-    func AVOrientationFromDeviceOrientation(deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
-        switch deviceOrientation {
-        case UIDeviceOrientation.landscapeLeft:
-            return AVCaptureVideoOrientation.landscapeRight
-        case UIDeviceOrientation.landscapeRight:
-            return AVCaptureVideoOrientation.landscapeLeft
-        case UIDeviceOrientation.portrait:
-            return AVCaptureVideoOrientation.portrait
-        case UIDeviceOrientation.portraitUpsideDown:
-            return AVCaptureVideoOrientation.portraitUpsideDown
-        default:
-            return AVCaptureVideoOrientation.portrait
-        }
-    }
-    
-    func beginSession() {
-        do {
-            configureDevice()
-            
-            try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
-            
-            // although we don't use this, it's required to get captureOutput invoked
-            let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            view.layer.addSublayer(previewLayer!)
-            
-            output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "sample buffer delegate"))
-            captureSession.addOutput(output)
-            
-            captureSession.startRunning()
-        } catch let error as NSError {
-            print("error: \(error.localizedDescription)")
-        }
-    }
-    
-    func configureDevice() {
-        if let device = captureDevice {
-            do {
-                try device.lockForConfiguration()
-                device.focusMode = .autoFocus
-                device.unlockForConfiguration()
-            } catch let error as NSError {
-                print("error: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        let cameraImage = CIImage(cvPixelBuffer: pixelBuffer!)
-        let uiimage = UIImage(ciImage: cameraImage)
-        
-        updateUIView(image: uiimage)
-    }
-    
-    func updateUIView(image: UIImage) {
-        DispatchQueue.main.async {
-            self.imageView.image = image
-        }
+    @objc private func doneButtonAction() {
+        textfieldFrequency.resignFirstResponder()
     }
     
     @IBAction func saveButtonTouchUp(_ sender: Any) {
@@ -130,11 +66,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     @IBAction func startButtonTouchUp(_ sender: Any) {
         if !capturing {
-            if let freq = Double(textfieldFrequency.text!) {
-                timer = Timer.scheduledTimer(timeInterval: freq, target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
-                buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
-                capturing = true
+            guard let frequency = frequency else {
+                return
             }
+            
+            timer = Timer.scheduledTimer(timeInterval: Double(frequency), target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
+            buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
+            capturing = true
+            
         } else {
             timer.invalidate()
             buttonStartCapturing.setTitle("Start Capturing", for: .normal)
@@ -143,16 +82,31 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func saveCurrentImage() {
-//        assetManager.addAsset(image: imageView.image!)
-        assetManager.saveImage(image: imageView.image!) { url, error in
-            if let url = url {
-                self.imageURLs.append(url)
-//                self.images.append(url)
-            }
+        guard let image = imageView.image else {
+            return
+        }
+        assetManager.addAsset(image: image)
+    }
+}
+
+extension ViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else {
+            return
+        }
+        
+        if text.characters.count == 0 {
+            frequency = nil
+            textField.text = "Frequency"
+        } else {
+            frequency = Int(text)
+            textField.text?.append(" s")
         }
     }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.resignFirstResponder()
+}
+
+extension ViewController: FrameExtractorDelegate {
+    func captured(image: UIImage) {
+        imageView.image = image
     }
 }

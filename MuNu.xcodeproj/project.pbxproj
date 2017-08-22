@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0589EAEC1F4BF8C1001BD395 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0589EAEB1F4BF8C1001BD395 /* FrameExtractor.swift */; };
 		059881641E0CF5F10008399D /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059881631E0CF5F10008399D /* AssetManager.swift */; };
 		05A97B8A1DE1045200CAD0F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A97B891DE1045200CAD0F0 /* AppDelegate.swift */; };
 		05A97B8C1DE1045200CAD0F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A97B8B1DE1045200CAD0F0 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0589EAEB1F4BF8C1001BD395 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		059881631E0CF5F10008399D /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssetManager.swift; path = ../AssetManager.swift; sourceTree = "<group>"; };
 		05A97B861DE1045200CAD0F0 /* MuNu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuNu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A97B891DE1045200CAD0F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				05A97B901DE1045200CAD0F0 /* Assets.xcassets */,
 				05A97B921DE1045200CAD0F0 /* LaunchScreen.storyboard */,
 				05A97B951DE1045200CAD0F0 /* Info.plist */,
+				0589EAEB1F4BF8C1001BD395 /* FrameExtractor.swift */,
 			);
 			path = MuNu;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 				05A97B8C1DE1045200CAD0F0 /* ViewController.swift in Sources */,
 				059881641E0CF5F10008399D /* AssetManager.swift in Sources */,
 				05A97B8A1DE1045200CAD0F0 /* AppDelegate.swift in Sources */,
+				0589EAEC1F4BF8C1001BD395 /* FrameExtractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
