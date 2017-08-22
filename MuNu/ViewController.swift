@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     let stillImageOutput = AVCapturePhotoOutput()
 
     var timer = Timer()
+    var frequency: Int?
     var capturing = false
     
     var imageURLs = [URL]()
@@ -37,6 +38,7 @@ class ViewController: UIViewController {
     }
     
     private func configureView() {
+        textfieldFrequency.delegate = self
         frameExtractor.delegate = self
         addDoneButtonOnKeyboard()
     }
@@ -64,11 +66,14 @@ class ViewController: UIViewController {
     
     @IBAction func startButtonTouchUp(_ sender: Any) {
         if !capturing {
-            if let freq = Double(textfieldFrequency.text!) {
-                timer = Timer.scheduledTimer(timeInterval: freq, target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
-                buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
-                capturing = true
+            guard let frequency = frequency else {
+                return
             }
+            
+            timer = Timer.scheduledTimer(timeInterval: Double(frequency), target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
+            buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
+            capturing = true
+            
         } else {
             timer.invalidate()
             buttonStartCapturing.setTitle("Start Capturing", for: .normal)
@@ -81,6 +86,22 @@ class ViewController: UIViewController {
             return
         }
         assetManager.addAsset(image: image)
+    }
+}
+
+extension ViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else {
+            return
+        }
+        
+        if text.characters.count == 0 {
+            frequency = nil
+            textField.text = "Frequency"
+        } else {
+            frequency = Int(text)
+            textField.text?.append(" s")
+        }
     }
 }
 
