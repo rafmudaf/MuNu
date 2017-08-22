@@ -66,9 +66,9 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         do {
             try captureDevice.lockForConfiguration()
-            captureDevice.focusMode = .autoFocus
+            captureDevice.focusMode = .continuousAutoFocus
             captureDevice.whiteBalanceMode = .continuousAutoWhiteBalance
-            captureDevice.exposureMode = .autoExpose
+            captureDevice.exposureMode = .continuousAutoExposure
             captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             print("error: \(error.localizedDescription)")
