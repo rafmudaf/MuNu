@@ -75,13 +75,10 @@ class ViewController: UIViewController, UITextFieldDelegate, FrameExtractorDeleg
     }
     
     func saveCurrentImage() {
-//        assetManager.addAsset(image: imageView.image!)
-        assetManager.saveImage(image: imageView.image!) { url, error in
-            if let url = url {
-                self.imageURLs.append(url)
-//                self.images.append(url)
-            }
+        guard let image = imageView.image else {
+            return
         }
+        assetManager.addAsset(image: image)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
