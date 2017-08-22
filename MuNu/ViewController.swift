@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import GLKit
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UITextFieldDelegate {
     
@@ -24,10 +23,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
     var timer = Timer()
     var capturing = false
-    
-    var glContext: EAGLContext!
-    var glView: GLKView!
-    var ciContext: CIContext!
     
     var imageURLs = [URL]()
     var images = [UIImage]()
@@ -54,9 +49,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             beginSession()
         }
         
-        glContext = EAGLContext(api: .openGLES2)
-        glView = GLKView(frame: view.frame, context: glContext!)
-        ciContext = CIContext(eaglContext: glContext!)
     }
     
     func rotated() {
