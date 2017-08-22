@@ -99,7 +99,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         if let device = captureDevice {
             do {
                 try device.lockForConfiguration()
-                device.focusMode = .locked
+                device.focusMode = .autoFocus
                 device.unlockForConfiguration()
             } catch let error as NSError {
                 print("error: \(error.localizedDescription)")
