@@ -22,7 +22,7 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     private var permissionGranted = false
     
     private let position = AVCaptureDevicePosition.back
-    private let quality = AVCaptureSessionPresetMedium
+    private let quality = AVCaptureSessionPreset1920x1080
     private let context = CIContext()
     
     weak var delegate: FrameExtractorDelegate?
