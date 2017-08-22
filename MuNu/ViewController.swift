@@ -29,6 +29,7 @@ class ViewController: UIViewController {
     var images = [UIImage]()
     
     let assetManager = AssetManager()
+    let gifManager = GifManager()
 
     var frameExtractor = FrameExtractor()
     
@@ -78,6 +79,22 @@ class ViewController: UIViewController {
             timer.invalidate()
             buttonStartCapturing.setTitle("Start Capturing", for: .normal)
             capturing = false
+
+//            var images = [UIImage]()
+//            for url in imageURLs {
+//                print(url.absoluteString)
+//                let filemanager = FileManager.default
+//                print(filemanager.fileExists(atPath: url.absoluteString))
+//                if let image = UIImage(contentsOfFile: url.absoluteString) {
+//                    images.append(image)
+//                }
+//            }
+
+//            print(images.count)
+//            gifManager.createGIF(with: images, loopCount: 1, frameDelay: 1.0) { data, error in
+//                print(data)
+//                print(error)
+//            }
         }
     }
     
