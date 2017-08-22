@@ -45,39 +45,30 @@ class AssetManager {
         })
     }
     
-//    func addAsset(image: UIImage?) {
-//        guard let image = image else {
-//            return
-//        }
-//        
-//        PHPhotoLibrary.shared().performChanges(
-//            {
-//                // Request creating an asset from the image.
-//                let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-//
-//                // Request editing the album.
-//                guard let addAssetRequest = PHAssetCollectionChangeRequest(for: self.collection) else {
-//                    return
-//                }
-//
-//                // Get a placeholder for the new asset and add it to the album editing request.
-//                addAssetRequest.addAssets([creationRequest.placeholderForCreatedAsset!] as NSArray)
-//            },
-//            completionHandler: { success, error in
-//                if !success {
-//                    NSLog("error creating asset: \(String(describing: error))")
-//                }
-//            }
-//        )
-//    }
-    
-    func saveImage(image: UIImage, completion: @escaping (URL?, Error?) -> Void) {
-        let ciimage = image.ciImage!
-        let softwareContext = CIContext(options:[kCIContextUseSoftwareRenderer: true])
-        let cgimage = softwareContext.createCGImage(ciimage, from: (ciimage.extent))
-        let library = ALAssetsLibrary()
-        library.writeImage(toSavedPhotosAlbum: cgimage, metadata: ciimage.properties) { url, error in
-            completion(url, error)
+    func addAsset(image: UIImage?) {
+        
+        guard let image = image else {
+            return
         }
+        
+        PHPhotoLibrary.shared().performChanges(
+            {
+                // Request creating an asset from the image.
+                let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                
+                // Request editing the album.
+                guard let addAssetRequest = PHAssetCollectionChangeRequest(for: self.collection) else {
+                    return
+                }
+                
+                // Get a placeholder for the new asset and add it to the album editing request.
+                addAssetRequest.addAssets([creationRequest.placeholderForCreatedAsset!] as NSArray)
+            },
+            completionHandler: { success, error in
+                if !success {
+                    NSLog("error creating asset: \(String(describing: error))")
+                }
+            }
+        )
     }
 }
