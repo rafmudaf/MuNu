@@ -57,6 +57,7 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         guard permissionGranted else {
             return
         }
+        
         captureSession.sessionPreset = quality
         guard let captureDevice = selectCaptureDevice() else {
             return
@@ -70,12 +71,15 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         } catch let error as NSError {
             print("error: \(error.localizedDescription)")
         }
+        
         guard let captureDeviceInput = try? AVCaptureDeviceInput(device: captureDevice) else {
             return
         }
+        
         guard captureSession.canAddInput(captureDeviceInput) else {
             return
         }
+        
         captureSession.addInput(captureDeviceInput)
         
         let videoOutput = AVCaptureVideoDataOutput()
@@ -99,16 +103,23 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     private func selectCaptureDevice() -> AVCaptureDevice? {
-        return AVCaptureDevice.devices().filter {
-            ($0 as AnyObject).hasMediaType(AVMediaTypeVideo) &&
-                ($0 as AnyObject).position == position
-            }.first as? AVCaptureDevice
+        let deviceTypes = [AVCaptureDeviceType.builtInWideAngleCamera]
+        let mediaType = AVMediaTypeVideo
+        guard let devices = AVCaptureDeviceDiscoverySession(deviceTypes: deviceTypes, mediaType: mediaType, position: position) else {
+            return nil
+        }
+        
+        return devices.devices.filter { ($0 as AnyObject).hasMediaType(AVMediaTypeVideo) && ($0 as AnyObject).position == position }.first
     }
     
     private func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return nil
+        }
         let ciImage = CIImage(cvPixelBuffer: imageBuffer)
-        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
+        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
+            return nil
+        }
         return UIImage(cgImage: cgImage)
     }
     
