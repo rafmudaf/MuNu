@@ -12,8 +12,9 @@ import AssetsLibrary
 
 class AssetManager {
     
+    let appName = "MuNu"
+    
     var assetCollection: PHAssetCollection!
-    var albumFound: Bool = false
     var assetThumbnailSize: CGSize!
     
 //    var photosAsset: PHFetchResult<PHAsset>!
@@ -21,9 +22,9 @@ class AssetManager {
     var assetCollectionPlaceholder: PHObjectPlaceholder!
     
     init() {
-        //Make sure we have custom album for this app if haven't already
+        // Make sure we have custom album for this app if haven't already made it
         let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "title = %@", "MY_APP_ALBUM_NAME")
+        fetchOptions.predicate = NSPredicate(format: "title = %@", appName)
         collection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions).firstObject
 
         //if we don't have a special album for this app yet then make one
@@ -34,7 +35,7 @@ class AssetManager {
     
     func createAlbum() {
         PHPhotoLibrary.shared().performChanges({
-            let createAlbumRequest: PHAssetCollectionChangeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: "MY_APP_ALBUM_NAME")
+            let createAlbumRequest: PHAssetCollectionChangeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: self.appName)
             self.assetCollectionPlaceholder = createAlbumRequest.placeholderForCreatedAssetCollection
         }, completionHandler: { success, error in
             if success {
@@ -44,53 +45,39 @@ class AssetManager {
         })
     }
     
+//    func addAsset(image: UIImage?) {
+//        guard let image = image else {
+//            return
+//        }
+//        
+//        PHPhotoLibrary.shared().performChanges(
+//            {
+//                // Request creating an asset from the image.
+//                let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+//
+//                // Request editing the album.
+//                guard let addAssetRequest = PHAssetCollectionChangeRequest(for: self.collection) else {
+//                    return
+//                }
+//
+//                // Get a placeholder for the new asset and add it to the album editing request.
+//                addAssetRequest.addAssets([creationRequest.placeholderForCreatedAsset!] as NSArray)
+//            },
+//            completionHandler: { success, error in
+//                if !success {
+//                    NSLog("error creating asset: \(String(describing: error))")
+//                }
+//            }
+//        )
+//    }
+    
     func saveImage(image: UIImage, completion: @escaping (URL?, Error?) -> Void) {
         let ciimage = image.ciImage!
         let softwareContext = CIContext(options:[kCIContextUseSoftwareRenderer: true])
         let cgimage = softwareContext.createCGImage(ciimage, from: (ciimage.extent))
         let library = ALAssetsLibrary()
-        library.writeImage(toSavedPhotosAlbum: cgimage, metadata: ciimage.properties) {url, error in
+        library.writeImage(toSavedPhotosAlbum: cgimage, metadata: ciimage.properties) { url, error in
             completion(url, error)
         }
     }
-    
-//    func saveImage(image: UIImage) {
-//        
-//        let data = UIImagePNGRepresentation(UIImage(cgImage: image.cgImage!))!
-//        let filename = getDocumentsDirectory().appendingPathComponent("copy.png")
-//        do {
-//            try data.write(to: filename)
-//            
-//            //save the image to Photos
-//            PHPhotoLibrary.shared().performChanges({
-//                //            let assetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-//                let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: filename)!
-//                let assetPlaceholder = assetRequest.placeholderForCreatedAsset!
-//                
-//                //            self.photosAsset = PHAsset.fetchAssets(in: self.collection, options: nil)
-//                let albumChangeRequest = PHAssetCollectionChangeRequest(for: self.collection)
-//                print(image)
-//                print(self.collection.canPerform(PHCollectionEditOperation.addContent))
-//                
-//                albumChangeRequest?.addAssets([assetPlaceholder] as NSArray)
-//                
-//            }, completionHandler: { success, error in
-//                
-//                if success {
-//                    print("added video to album")
-//                } else if error != nil {
-//                    print("handle error since couldn't save video\n\(error)")
-//                }
-//                
-//            })
-//        } catch {
-//            
-//        }
-//    }
-//    
-//    func getDocumentsDirectory() -> URL {
-//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//        let documentsDirectory = paths[0]
-//        return documentsDirectory
-//    }
 }

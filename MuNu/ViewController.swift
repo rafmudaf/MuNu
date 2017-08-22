@@ -29,6 +29,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var glView: GLKView!
     var ciContext: CIContext!
     
+    var imageURLs = [URL]()
+    var images = [UIImage]()
+    
     let assetManager = AssetManager()
     
     override func viewDidLoad() {
@@ -140,8 +143,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func saveCurrentImage() {
-        assetManager.saveImage(image: imageView.image!) { assetURL, error in
-            print(assetURL)
+//        assetManager.addAsset(image: imageView.image!)
+        assetManager.saveImage(image: imageView.image!) { url, error in
+            if let url = url {
+                self.imageURLs.append(url)
+//                self.images.append(url)
+            }
         }
     }
     
