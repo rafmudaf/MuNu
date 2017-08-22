@@ -33,12 +33,29 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        frameExtractor.delegate = self
-    }
-        
+        configureView()
     }
     
+    private func configureView() {
+        frameExtractor.delegate = self
+        addDoneButtonOnKeyboard()
+    }
+    
+    private func addDoneButtonOnKeyboard() {
+        let doneToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        doneToolbar.barStyle = UIBarStyle.blackTranslucent
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+        
+        doneToolbar.items = [flexSpace, done]
+        doneToolbar.sizeToFit()
+        
+        textfieldFrequency.inputAccessoryView = doneToolbar
+    }
+    
+    @objc private func doneButtonAction() {
+        textfieldFrequency.resignFirstResponder()
     }
     
     @IBAction func saveButtonTouchUp(_ sender: Any) {
