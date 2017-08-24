@@ -14,10 +14,6 @@ class AssetManager {
     
     let appName = "MuNu"
     
-    var assetCollection: PHAssetCollection!
-    var assetThumbnailSize: CGSize!
-    
-//    var photosAsset: PHFetchResult<PHAsset>!
     var collection: PHAssetCollection!
     var assetCollectionPlaceholder: PHObjectPlaceholder!
     
@@ -45,7 +41,7 @@ class AssetManager {
         })
     }
     
-    func addAsset(image: UIImage?) {
+    func addAsset(image: UIImage?, completion: @escaping (URL?, Error?) -> Void) {
         
         guard let image = image else {
             return
@@ -67,7 +63,9 @@ class AssetManager {
             completionHandler: { success, error in
                 if !success {
                     NSLog("error creating asset: \(String(describing: error))")
+                    completion(nil, error)
                 }
+                completion(nil , nil)
             }
         )
     }
