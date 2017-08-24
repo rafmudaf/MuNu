@@ -24,18 +24,20 @@ class ViewController: UIViewController {
     var timer = Timer()
     var frequency: Int?
     var capturing = false
-    
     var imageURLs = [URL]()
     var images = [UIImage]()
     
     let assetManager = AssetManager()
     let gifManager = GifManager()
-
     var frameExtractor = FrameExtractor()
+
+    var showGif = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        frequency = 1
+        startCapturing()
     }
     
     private func configureView() {
@@ -67,42 +69,68 @@ class ViewController: UIViewController {
     
     @IBAction func startButtonTouchUp(_ sender: Any) {
         if !capturing {
-            guard let frequency = frequency else {
-                return
-            }
-            
-            timer = Timer.scheduledTimer(timeInterval: Double(frequency), target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
-            buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
-            capturing = true
-            
+            startCapturing()
         } else {
-            timer.invalidate()
-            buttonStartCapturing.setTitle("Start Capturing", for: .normal)
-            capturing = false
-
-//            var images = [UIImage]()
-//            for url in imageURLs {
-//                print(url.absoluteString)
-//                let filemanager = FileManager.default
-//                print(filemanager.fileExists(atPath: url.absoluteString))
-//                if let image = UIImage(contentsOfFile: url.absoluteString) {
-//                    images.append(image)
-//                }
-//            }
-
-//            print(images.count)
-//            gifManager.createGIF(with: images, loopCount: 1, frameDelay: 1.0) { data, error in
-//                print(data)
-//                print(error)
-//            }
+            stopCapturing()
         }
     }
     
-    func saveCurrentImage() {
+    private func startCapturing() {
+        guard let frequency = frequency else {
+            return
+        }
+        
+        timer = Timer.scheduledTimer(timeInterval: Double(frequency), target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
+        buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
+        
+        capturing = true
+    }
+    
+    private func stopCapturing() {
+        timer.invalidate()
+        buttonStartCapturing.setTitle("Start Capturing", for: .normal)
+        capturing = false
+    }
+    
+    @objc private func saveCurrentImage() {
         guard let image = imageView.image else {
             return
         }
-        assetManager.addAsset(image: image)
+        
+        images.append(image)
+        
+        assetManager.addAsset(image: image) { (url, error) in
+            print("")
+        }
+        
+        if images.count == 5 {
+            stopCapturing()
+
+            gifManager.createAnimatedImage(with: images, duration: 1.0) { (image, error) in
+                guard let animatedImage = image else {
+                    print("no image")
+                    return
+                }
+                showAnimatedImage(animatedImage: animatedImage)
+            }
+            
+//            gifManager.createGIF(with: images, frameDelay: 0.1, callback: { (image, error) in
+//                print(url)
+//                let imageURL = UIImage.gifImageWithURL(gifURL)
+//                let imageView3 = UIImageView(image: imageURL)
+//                imageView3.frame = CGRect(x: 20.0, y: 390.0, width: self.view.frame.size.width - 40, height: 150.0)
+//            })
+        }
+    }
+    
+    private func showAnimatedImage(animatedImage: UIImage) {
+        timer = Timer.scheduledTimer(timeInterval: animatedImage.duration, target: self, selector: #selector(showCamera), userInfo: nil, repeats: false)
+        showGif = true
+        imageView.image = animatedImage
+    }
+    
+    @objc private func showCamera() {
+        showGif = false
     }
 }
 
@@ -124,6 +152,8 @@ extension ViewController: UITextFieldDelegate {
 
 extension ViewController: FrameExtractorDelegate {
     func captured(image: UIImage) {
-        imageView.image = image
+        if !showGif {
+            imageView.image = image
+        }
     }
 }
