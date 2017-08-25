@@ -91,12 +91,17 @@ class ViewController: UIViewController {
     }
     
     @objc private func saveCurrentImage() {
-        guard let image = imageView.image else {
-            return
+        DispatchQueue.global(qos: .background).async {
+            guard let image = self.imageView.image else {
+                return
+            }
+            
+            if let localurl = self.assetManager.locallyStore(image: image, named: "\(self.imageURLs.count)") {
+                self.imageURLs.append(localurl)
+            }
         }
-        
-        if let localurl = assetManager.locallyStore(image: image, named: "\(imageURLs.count)") {
-            imageURLs.append(localurl)
+    }
+    
     private func deleteLocallyStoredImages() {
         for url in imageURLs {
             assetManager.locallyRemove(itemAt: url)
