@@ -41,7 +41,7 @@ class AssetManager {
         })
     }
     
-    func addAsset(image: UIImage?, completion: @escaping (URL?, Error?) -> Void) {
+    func addAsset(image: UIImage?, completion: @escaping (Error?) -> Void) {
         
         guard let image = image else {
             return
@@ -54,6 +54,7 @@ class AssetManager {
                 
                 // Request editing the album.
                 guard let addAssetRequest = PHAssetCollectionChangeRequest(for: self.collection) else {
+                    completion(nil)
                     return
                 }
                 
@@ -63,10 +64,96 @@ class AssetManager {
             completionHandler: { success, error in
                 if !success {
                     NSLog("error creating asset: \(String(describing: error))")
-                    completion(nil, error)
+                    completion(error)
                 }
-                completion(nil , nil)
+                completion(nil)
             }
         )
     }
+    
+    func addAsset(url: URL?, completion: @escaping (Error?) -> Void) {
+        
+        guard let url = url else {
+            return
+        }
+        
+        PHPhotoLibrary.shared().performChanges(
+            {
+                // Request creating an asset from the image.
+                guard let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) else {
+                    completion(nil)
+                    return
+                }
+                
+                // Request editing the album.
+                guard let addAssetRequest = PHAssetCollectionChangeRequest(for: self.collection) else {
+                    completion(nil)
+                    return
+                }
+                
+                // Get a placeholder for the new asset and add it to the album editing request.
+                addAssetRequest.addAssets([creationRequest.placeholderForCreatedAsset!] as NSArray)
+            },
+            completionHandler: { success, error in
+                if !success {
+                    NSLog("error creating asset: \(String(describing: error))")
+                    completion(error)
+                }
+                completion(nil)
+            }
+        )
+    }
+    
+    func storeLocally(image: UIImage?, basename: String) -> URL? {
+        guard let image = image else {
+            return nil
+        }
+        
+        guard let data = UIImageJPEGRepresentation(image, 1.0) else {
+            return nil
+        }
+        
+        let filepath = getDocumentsDirectory().appendingPathComponent("\(basename).jpg")
+        guard (try? data.write(to: filepath)) != nil else {
+            return nil
+        }
+        
+        return filepath
+    }
+    
+    private func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    func saveImagesInPhotos(urls: [URL]?) {
+        guard let urls = urls else {
+            return
+        }
+        for url in urls {
+            addAsset(url: url) { error in
+                print("")
+            }
+        }
+    }
+    
+    func loadImagesFromUrls(urls: [URL]) -> [UIImage] {
+        var images = [UIImage]()
+        for url in urls {
+            if let image = UIImage(contentsOfFile: url.path) {
+                images.append(image)
+            }
+        }
+        return images
+    }
+    
+    func createAnimatedImage(with images: [UIImage], duration: Double, completion: (_ animatedImage: UIImage?, _ error: NSError?) -> ()) {
+        guard let animatedImage = UIImage.animatedImage(with: images, duration: duration) else {
+            completion(nil, NSError())
+            return
+        }
+        completion(animatedImage, nil)
+    }
 }
+

@@ -90,6 +90,8 @@ class ViewController: UIViewController {
         timer.invalidate()
         buttonStartCapturing.setTitle("Start Capturing", for: .normal)
         capturing = false
+        
+        postProcess()
     }
     
     @objc private func saveCurrentImage() {
@@ -97,29 +99,12 @@ class ViewController: UIViewController {
             return
         }
         
-        images.append(image)
-        
-        assetManager.addAsset(image: image) { (url, error) in
-            print("")
+        if let localurl = assetManager.storeLocally(image: image, basename: "\(imageURLs.count)") {
+            imageURLs.append(localurl)
         }
         
-        if images.count == 5 {
+        if imageURLs.count == 4 {
             stopCapturing()
-
-            gifManager.createAnimatedImage(with: images, duration: 1.0) { (image, error) in
-                guard let animatedImage = image else {
-                    print("no image")
-                    return
-                }
-                showAnimatedImage(animatedImage: animatedImage)
-            }
-            
-//            gifManager.createGIF(with: images, frameDelay: 0.1, callback: { (image, error) in
-//                print(url)
-//                let imageURL = UIImage.gifImageWithURL(gifURL)
-//                let imageView3 = UIImageView(image: imageURL)
-//                imageView3.frame = CGRect(x: 20.0, y: 390.0, width: self.view.frame.size.width - 40, height: 150.0)
-//            })
         }
     }
     
@@ -131,6 +116,20 @@ class ViewController: UIViewController {
     
     @objc private func showCamera() {
         showGif = false
+    }
+    
+    private func postProcess() {
+        
+//        assetManager.saveImagesInPhotos(urls: imageURLs)
+        
+        let images = assetManager.loadImagesFromUrls(urls: imageURLs)
+        assetManager.createAnimatedImage(with: images, duration: 1.0) { (image, error) in
+            guard let animatedImage = image else {
+                print("no image")
+                return
+            }
+            showAnimatedImage(animatedImage: animatedImage)
+        }
     }
 }
 
