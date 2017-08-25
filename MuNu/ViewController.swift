@@ -20,23 +20,20 @@ class ViewController: UIViewController {
     var captureDevice: AVCaptureDevice?
     let output = AVCaptureVideoDataOutput()
     let stillImageOutput = AVCapturePhotoOutput()
-
+    
     var timer = Timer()
     var frequency: Int?
     var capturing = false
     var imageURLs = [URL]()
-    var images = [UIImage]()
     
-    let assetManager = AssetManager()
-    let gifManager = GifManager()
     var frameExtractor = FrameExtractor()
-
+    let assetManager = AssetManager()
+    
     var showGif = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        frequency = 1
         startCapturing()
     }
     
@@ -48,10 +45,10 @@ class ViewController: UIViewController {
     
     private func addDoneButtonOnKeyboard() {
         let doneToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        doneToolbar.barStyle = UIBarStyle.blackTranslucent
+        doneToolbar.barStyle = .blackTranslucent
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(keyboardDone))
         
         doneToolbar.items = [flexSpace, done]
         doneToolbar.sizeToFit()
@@ -59,7 +56,7 @@ class ViewController: UIViewController {
         textfieldFrequency.inputAccessoryView = doneToolbar
     }
     
-    @objc private func doneButtonAction() {
+    @objc private func keyboardDone() {
         textfieldFrequency.resignFirstResponder()
     }
     
@@ -82,7 +79,6 @@ class ViewController: UIViewController {
         
         timer = Timer.scheduledTimer(timeInterval: Double(frequency), target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
         buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
-        
         capturing = true
     }
     
@@ -99,12 +95,8 @@ class ViewController: UIViewController {
             return
         }
         
-        if let localurl = assetManager.storeLocally(image: image, basename: "\(imageURLs.count)") {
+        if let localurl = assetManager.locallyStore(image: image, named: "\(imageURLs.count)") {
             imageURLs.append(localurl)
-        }
-        
-        if imageURLs.count == 4 {
-            stopCapturing()
         }
     }
     
@@ -122,7 +114,7 @@ class ViewController: UIViewController {
         
 //        assetManager.saveImagesInPhotos(urls: imageURLs)
         
-        let images = assetManager.loadImagesFromUrls(urls: imageURLs)
+        let images = assetManager.getImagesFrom(urls: imageURLs)
         assetManager.createAnimatedImage(with: images, duration: 1.0) { (image, error) in
             guard let animatedImage = image else {
                 print("no image")

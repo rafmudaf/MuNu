@@ -12,10 +12,10 @@ import AssetsLibrary
 
 class AssetManager {
     
-    let appName = "MuNu"
+    private let appName = "MuNu"
     
-    var collection: PHAssetCollection!
-    var assetCollectionPlaceholder: PHObjectPlaceholder!
+    private var collection: PHAssetCollection!
+    private var assetCollectionPlaceholder: PHObjectPlaceholder!
     
     init() {
         // Make sure we have custom album for this app if haven't already made it
@@ -29,7 +29,7 @@ class AssetManager {
         }
     }
     
-    func createAlbum() {
+    private func createAlbum() {
         PHPhotoLibrary.shared().performChanges({
             let createAlbumRequest: PHAssetCollectionChangeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: self.appName)
             self.assetCollectionPlaceholder = createAlbumRequest.placeholderForCreatedAssetCollection
@@ -41,7 +41,7 @@ class AssetManager {
         })
     }
     
-    func addAsset(image: UIImage?, completion: @escaping (Error?) -> Void) {
+    public func addAsset(image: UIImage?, completion: @escaping (Error?) -> Void) {
         
         guard let image = image else {
             return
@@ -71,7 +71,7 @@ class AssetManager {
         )
     }
     
-    func addAsset(url: URL?, completion: @escaping (Error?) -> Void) {
+    public func addAsset(url: URL?, completion: @escaping (Error?) -> Void) {
         
         guard let url = url else {
             return
@@ -104,7 +104,7 @@ class AssetManager {
         )
     }
     
-    func storeLocally(image: UIImage?, basename: String) -> URL? {
+    public func locallyStore(image: UIImage?, named basename: String) -> URL? {
         guard let image = image else {
             return nil
         }
@@ -121,24 +121,16 @@ class AssetManager {
         return filepath
     }
     
-    private func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
-    }
-    
-    func saveImagesInPhotos(urls: [URL]?) {
+    public func saveImagesInPhotos(urls: [URL]?) {
         guard let urls = urls else {
             return
         }
         for url in urls {
-            addAsset(url: url) { error in
-                print("")
-            }
+            addAsset(url: url) { _ in }
         }
     }
     
-    func loadImagesFromUrls(urls: [URL]) -> [UIImage] {
+    public func getImagesFrom(urls: [URL]) -> [UIImage] {
         var images = [UIImage]()
         for url in urls {
             if let image = UIImage(contentsOfFile: url.path) {
@@ -148,12 +140,17 @@ class AssetManager {
         return images
     }
     
-    func createAnimatedImage(with images: [UIImage], duration: Double, completion: (_ animatedImage: UIImage?, _ error: NSError?) -> ()) {
+    public func createAnimatedImage(with images: [UIImage], duration: Double, completion: (_ animatedImage: UIImage?, _ error: NSError?) -> ()) {
         guard let animatedImage = UIImage.animatedImage(with: images, duration: duration) else {
             completion(nil, NSError())
             return
         }
         completion(animatedImage, nil)
     }
+    
+    private func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
 }
-

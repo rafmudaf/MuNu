@@ -35,12 +35,4 @@ class GifManager {
             completion(nil, NSError())
         }
     }
-    
-    func createAnimatedImage(with images: [UIImage], duration: Double, completion: (_ animatedImage: UIImage?, _ error: NSError?) -> ()) {
-        guard let animatedImage = UIImage.animatedImage(with: images, duration: duration) else {
-            completion(nil, NSError())
-            return
-        }
-        completion(animatedImage, nil)
-    }
 }

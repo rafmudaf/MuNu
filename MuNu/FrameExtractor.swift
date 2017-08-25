@@ -15,7 +15,7 @@ protocol FrameExtractorDelegate: class {
     func captured(image: UIImage)
 }
 
-class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
+class FrameExtractor: NSObject {
 
     private let captureSession = AVCaptureSession()
     private let sessionQueue = DispatchQueue(label: "session queue")
@@ -114,7 +114,7 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         return devices.devices.filter { ($0 as AnyObject).hasMediaType(AVMediaTypeVideo) && ($0 as AnyObject).position == position }.first
     }
     
-    private func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+    fileprivate func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return nil
         }
@@ -124,8 +124,10 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         return UIImage(cgImage: cgImage)
     }
-    
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+}
+
+extension FrameExtractor: AVCaptureVideoDataOutputSampleBufferDelegate {
+    public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         guard let uiImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer) else {
             return
         }
