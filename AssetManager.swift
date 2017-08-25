@@ -121,6 +121,10 @@ class AssetManager {
         return filepath
     }
     
+    public func locallyRemove(itemAt url: URL) {
+        try? FileManager.default.removeItem(at: url)
+    }
+    
     public func saveImagesInPhotos(urls: [URL]?) {
         guard let urls = urls else {
             return

@@ -97,7 +97,11 @@ class ViewController: UIViewController {
         
         if let localurl = assetManager.locallyStore(image: image, named: "\(imageURLs.count)") {
             imageURLs.append(localurl)
+    private func deleteLocallyStoredImages() {
+        for url in imageURLs {
+            assetManager.locallyRemove(itemAt: url)
         }
+        imageURLs = [URL]()
     }
     
     private func showAnimatedImage(animatedImage: UIImage) {
@@ -107,6 +111,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func showCamera() {
+        deleteLocallyStoredImages()
         showGif = false
     }
     
