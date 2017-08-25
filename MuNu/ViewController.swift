@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     let stillImageOutput = AVCapturePhotoOutput()
     
     var timer = Timer()
-    var frequency: Int?
+    var frequency: Double?
     var capturing = false
     var imageURLs = [URL]()
     
@@ -77,7 +77,7 @@ class ViewController: UIViewController {
             return
         }
         
-        timer = Timer.scheduledTimer(timeInterval: Double(frequency), target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: frequency, target: self, selector: #selector(saveCurrentImage), userInfo: nil, repeats: true)
         buttonStartCapturing.setTitle("Stop Capturing", for: .normal)
         capturing = true
     }
@@ -135,7 +135,7 @@ extension ViewController: UITextFieldDelegate {
             frequency = nil
             textField.text = "Frequency"
         } else {
-            frequency = Int(text)
+            frequency = Double(text)
             textField.text?.append(" s")
         }
     }
