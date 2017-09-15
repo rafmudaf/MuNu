@@ -110,7 +110,7 @@ class ViewController: UIViewController {
     }
     
     private func showAnimatedImage(animatedImage: UIImage) {
-        timer = Timer.scheduledTimer(timeInterval: animatedImage.duration, target: self, selector: #selector(showCamera), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: 2*animatedImage.duration, target: self, selector: #selector(showCamera), userInfo: nil, repeats: false)
         showGif = true
         imageView.image = animatedImage
     }
