@@ -125,12 +125,15 @@ class ViewController: UIViewController {
 //        assetManager.saveImagesInPhotos(urls: imageURLs)
         
         let images = assetManager.getImagesFrom(urls: imageURLs)
-        assetManager.createAnimatedImage(with: images, duration: 1.0) { (image, error) in
+        assetManager.createAnimatedImage(with: images, duration: 5.0) { (image, error) in
             guard let animatedImage = image else {
                 print("no image")
                 return
             }
             showAnimatedImage(animatedImage: animatedImage)
+            assetManager.addAsset(image: animatedImage, completion: { (error) in
+                print(error)
+            })
         }
     }
 }
