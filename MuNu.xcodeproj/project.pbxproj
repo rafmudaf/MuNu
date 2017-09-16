@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05754E411E0E4F7300706599 /* GifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05754E401E0E4F7300706599 /* GifManager.swift */; };
 		0589EAEC1F4BF8C1001BD395 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0589EAEB1F4BF8C1001BD395 /* FrameExtractor.swift */; };
 		059881641E0CF5F10008399D /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059881631E0CF5F10008399D /* AssetManager.swift */; };
 		05A97B8A1DE1045200CAD0F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A97B891DE1045200CAD0F0 /* AppDelegate.swift */; };
@@ -19,7 +18,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		05754E401E0E4F7300706599 /* GifManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GifManager.swift; sourceTree = "<group>"; };
 		0589EAEB1F4BF8C1001BD395 /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		059881631E0CF5F10008399D /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssetManager.swift; path = ../AssetManager.swift; sourceTree = "<group>"; };
 		05A97B861DE1045200CAD0F0 /* MuNu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuNu.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,7 +88,6 @@
 				05A97B8D1DE1045200CAD0F0 /* Main.storyboard */,
 				05A97B8B1DE1045200CAD0F0 /* ViewController.swift */,
 				059881631E0CF5F10008399D /* AssetManager.swift */,
-				05754E401E0E4F7300706599 /* GifManager.swift */,
 				0589EAEB1F4BF8C1001BD395 /* FrameExtractor.swift */,
 			);
 			path = MuNu;
@@ -229,7 +226,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05754E411E0E4F7300706599 /* GifManager.swift in Sources */,
 				05A97B8C1DE1045200CAD0F0 /* ViewController.swift in Sources */,
 				059881641E0CF5F10008399D /* AssetManager.swift in Sources */,
 				05A97B8A1DE1045200CAD0F0 /* AppDelegate.swift in Sources */,
