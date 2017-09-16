@@ -8,7 +8,7 @@
 
 import Foundation
 import Photos
-import AssetsLibrary
+import Spitfire
 
 class AssetManager {
     
@@ -16,6 +16,8 @@ class AssetManager {
     
     private var collection: PHAssetCollection!
     private var assetCollectionPlaceholder: PHObjectPlaceholder!
+    
+    private var spitfire: Spitfire?
     
     init() {
         // Make sure we have custom album for this app if haven't already made it
@@ -27,6 +29,8 @@ class AssetManager {
         if collection == nil {
             createAlbum()
         }
+        
+        spitfire = Spitfire()
     }
     
     private func createAlbum() {
@@ -71,7 +75,7 @@ class AssetManager {
         )
     }
     
-    public func addAsset(url: URL?, completion: @escaping (Error?) -> Void) {
+    public func addImageAsset(url: URL?, completion: @escaping (Error?) -> Void) {
         
         guard let url = url else {
             return
@@ -104,6 +108,39 @@ class AssetManager {
         )
     }
     
+    public func addVideoAsset(url: URL?, completion: @escaping (Error?) -> Void) {
+        
+        guard let url = url else {
+            return
+        }
+        
+        PHPhotoLibrary.shared().performChanges(
+            {
+                // Request creating an asset from the image.
+                guard let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) else {
+                    completion(nil)
+                    return
+                }
+                
+                // Request editing the album.
+                guard let addAssetRequest = PHAssetCollectionChangeRequest(for: self.collection) else {
+                    completion(nil)
+                    return
+                }
+                
+                // Get a placeholder for the new asset and add it to the album editing request.
+                addAssetRequest.addAssets([creationRequest.placeholderForCreatedAsset!] as NSArray)
+        },
+            completionHandler: { success, error in
+                if !success {
+                    NSLog("error creating asset: \(String(describing: error))")
+                    completion(error)
+                }
+                completion(nil)
+        }
+        )
+    }
+    
     public func locallyStore(image: UIImage?, named basename: String) -> URL? {
         guard let image = image else {
             return nil
@@ -130,7 +167,7 @@ class AssetManager {
             return
         }
         for url in urls {
-            addAsset(url: url) { _ in }
+            addImageAsset(url: url) { _ in }
         }
     }
     
@@ -144,7 +181,7 @@ class AssetManager {
         return images
     }
     
-    public func createAnimatedImage(with images: [UIImage], duration: Double, completion: (_ animatedImage: UIImage?, _ error: NSError?) -> ()) {
+    public func createAnimatedImage(with images: [UIImage], duration: Double, completion: (_ animatedImage: UIImage?, _ error: Error?) -> ()) {
         guard let animatedImage = UIImage.animatedImage(with: images, duration: duration) else {
             completion(nil, NSError())
             return
@@ -152,9 +189,24 @@ class AssetManager {
         completion(animatedImage, nil)
     }
     
+    public func createVideo(with images: [UIImage], framerate: Int, completion: @escaping (_ url: URL?, _ error: Error?) -> ()) {
+        guard let spitfire = spitfire else {
+            return
+        }
+        
+        do {
+            try spitfire.makeVideo(with: images, progress: { (progress) in
+                print("fraction completed: \(progress.fractionCompleted) - processed \(progress.completedUnitCount)")
+            }, success: { (url) in
+                completion(url, nil)
+            })
+        } catch {
+            completion(nil, error)
+        }
+    }
+    
     private func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
+        return paths[0]
     }
 }
