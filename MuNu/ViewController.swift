@@ -122,18 +122,20 @@ class ViewController: UIViewController {
     
     private func postProcess() {
         
-//        assetManager.saveImagesInPhotos(urls: imageURLs)
+        // TODO: give users the option to save all images
+        // assetManager.saveImagesInPhotos(urls: imageURLs)
         
         let images = assetManager.getImagesFrom(urls: imageURLs)
-        assetManager.createAnimatedImage(with: images, duration: 5.0) { (image, error) in
-            guard let animatedImage = image else {
-                print("no image")
+        
+        assetManager.createVideo(with: images, framerate: 5) { (url, error) in
+            guard let videoURL = url else {
+                print(error as Any)
                 return
             }
-            showAnimatedImage(animatedImage: animatedImage)
-            assetManager.addAsset(image: animatedImage, completion: { (error) in
-                print(error)
-            })
+            
+            self.assetManager.addVideoAsset(url: videoURL) { (error) in
+                print(error as Any)
+            }
         }
     }
 }
