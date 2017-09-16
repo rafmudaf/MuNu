@@ -22,7 +22,7 @@ class FrameExtractor: NSObject {
     private var permissionGranted = false
     
     private let position = AVCaptureDevicePosition.back
-    private let quality = AVCaptureSessionPreset1920x1080
+    private let quality = AVCaptureSessionPreset1280x720 //AVCaptureSessionPreset1920x1080 - video width must be divisible by 16.0
     private let context = CIContext()
     
     weak var delegate: FrameExtractorDelegate?
