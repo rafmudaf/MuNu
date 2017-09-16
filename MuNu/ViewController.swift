@@ -116,7 +116,6 @@ class ViewController: UIViewController {
     }
     
     @objc private func showCamera() {
-        deleteLocallyStoredImages()
         showGif = false
     }
     
@@ -130,13 +129,19 @@ class ViewController: UIViewController {
         assetManager.createVideo(with: images, framerate: 5) { (url, error) in
             guard let videoURL = url else {
                 print(error as Any)
+                self.cleanup()
                 return
             }
             
             self.assetManager.addVideoAsset(url: videoURL) { (error) in
                 print(error as Any)
+                self.cleanup()
             }
         }
+    }
+    
+    private func cleanup() {
+        deleteLocallyStoredImages()
     }
 }
 
