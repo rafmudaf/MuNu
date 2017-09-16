@@ -1,0 +1,12 @@
+PODS:
+  - Spitfire (1.0.1)
+
+DEPENDENCIES:
+  - Spitfire
+
+SPEC CHECKSUMS:
+  Spitfire: b86f61d8963f00690dba5895ee09b30dd1bd7bca
+
+PODFILE CHECKSUM: 54d9cebbf96a4a72d493255ff8a35fa775adf953
+
+COCOAPODS: 1.2.1
